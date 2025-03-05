@@ -137,12 +137,12 @@ const Home = () => {
                 <div className="w-full max-w-[1370px] space-y-3 my-3 relative">
                     <div className="flex flex-col md:flex-row justify-between items-center mb-4">
                         <div className='mb-4 md:mb-0'>
-                            {searchQuery !== '' && result.length > 0 ? (
+                            {searchQuery !== '' && result.length > 0 && !isLoading? (
                                 <p className="text-gray-700 font-bold text-center md:text-left">
                                     About {result.length} Trademarks found for {searchQuery}
                                 </p>
                             ) : (
-                                <p></p>
+                                <p className='font-bold text-gray-600 text-lg'>"Searching..."</p>
                             )}
                         </div>
                         <button 
