@@ -2,8 +2,7 @@ import { X, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { FiltersProps, FiltersType } from "../interfaces/homeInterface";
 
-const Filters: React.FC<FiltersProps> = ({ 
-    isVisible, 
+const Filters: React.FC<FiltersProps> = ({  
     handleViewMode, 
     view, 
     filters, 

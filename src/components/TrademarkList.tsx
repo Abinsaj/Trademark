@@ -1,5 +1,5 @@
 import { Button, Chip, Skeleton } from "@nextui-org/react";
-import formatTimestamp from "../config/timerConfig";
+import formatTimestamp from "../config/dateConfig";
 import { Monitor, RefreshCw } from "lucide-react";
 
 interface TrademarkListProps {
