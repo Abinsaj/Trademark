@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchBar from '../components/SearchBar'
 import { Filter } from 'lucide-react';
 import TrademarkList from '../components/TrademarkList';
 import Filters from '../components/Filters';
 import { getTradeMarkList } from '../api/trademarkService';
-import { FiltersType, TrademarkResult } from '../interfaces/homeInterface';
+import { FiltersType } from '../interfaces/homeInterface';
 import { toast } from 'sonner';
 
 const Home = () => {
@@ -26,19 +26,27 @@ const Home = () => {
                 setResult(hits);
                 setOriginalResult(hits);
             } else {
-                toast.error("No results found or unexpected response format.");
+                toast.error(`No results found for ${query}`);
             }
         } catch (error) {
             console.log(error);
             toast.error("An error occurred while fetching trademark data. Please try again later.");
-        }finally{
+        } finally {
             setIsLoading(false);
         }
     }
+    
+    useEffect(()=>{
+        setResult([])
+    },[searchQuery])
 
     const toggleFilters = () => {
         setShowFilters(!showFilters);
     }
+
+    const closeFilter = (val: boolean)=>{
+        setShowFilters(val)
+      }
 
     const handleViewMode = (mode: 'grid' | 'list') => {
         setView(mode);
@@ -137,16 +145,24 @@ const Home = () => {
                 <div className="w-full max-w-[1370px] space-y-3 my-3 relative">
                     <div className="flex flex-col md:flex-row justify-between items-center mb-4">
                         <div className='mb-4 md:mb-0'>
-                            {searchQuery !== '' && result.length > 0 && !isLoading? (
-                                <p className="text-gray-700 font-bold text-center md:text-left">
-                                    About {result.length} Trademarks found for {searchQuery}
-                                </p>
-                            ) : (
+                            {isLoading == true ? (
                                 <p className='font-bold text-gray-600 text-lg'>"Searching..."</p>
+                            ) : (
+                                <>
+                                    {result.length > 0 ? (
+                                        <p className="text-gray-700 font-bold text-center md:text-left">
+                                            About {result.length} Trademarks found for {searchQuery}
+                                        </p>
+                                    ) : searchQuery !=='' && result.length == 0 ? (
+                                        <p className='font-bold text-gray-600 text-lg'>"No data have been found.."</p>
+                                    ):(
+                                        <p></p>
+                                    )}
+                                </>
                             )}
                         </div>
-                        <button 
-                            className="flex items-center border rounded-lg px-4 py-2 gap-2 mx-auto md:mx-0" 
+                        <button
+                            className="flex items-center border rounded-lg px-4 py-2 gap-2 mx-auto md:mx-0"
                             onClick={toggleFilters}
                         >
                             <Filter className="h-4 w-4" />
@@ -165,12 +181,13 @@ const Home = () => {
                             bg-white shadow-lg md:shadow-none overflow-y-auto
                         `}>
                             <Filters
-                                isVisible={toggleFilters}
+                                isVisible={showFilters}
                                 handleViewMode={handleViewMode}
                                 view={view}
                                 filters={filters}
                                 updateFilters={updateFilters}
                                 filterOptions={filterOptions}
+                                closeFilter={closeFilter}
                             />
                         </div>
                     </div>

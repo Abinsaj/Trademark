@@ -8,7 +8,8 @@ const Filters: React.FC<FiltersProps> = ({
     view, 
     filters, 
     updateFilters, 
-    filterOptions 
+    filterOptions,
+    closeFilter
 }) => {
     const [localStatus, setLocalStatus] = useState<string[]>(filters.status || []);
     const [selectedCategory, setSelectedCategory] = useState<"owners" | "law_firms" | "attorneys">("owners");
@@ -40,19 +41,13 @@ const Filters: React.FC<FiltersProps> = ({
         item.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    if (!isVisible) {
-        return (
-            <div className="h-full flex items-center justify-center p-6 text-center text-gray-500">
-                <p>Click the Filter button to view and apply filters</p>
-            </div>
-        );
-    }
+  
 
     return (
         <div className="relative h-full overflow-auto">
             <div className="md:hidden absolute top-4 right-4 z-10">
                 <button 
-                    onClick={() => {isVisible}}
+                    onClick={() => {closeFilter(false)}}
                     className="p-2 rounded-full bg-gray-100"
                 >
                     <X className="h-6 w-6 text-gray-600" />
@@ -63,7 +58,7 @@ const Filters: React.FC<FiltersProps> = ({
                 <div className="px-3 py-6 rounded-lg border bg-white shadow-xl">
                     <h3 className="text-black font-bold text-base mb-3">Status</h3>
                     <div className="flex flex-wrap gap-2">
-                        {["Registered", "Pending", "Abandoned", "Others"].map((status) => (
+                        {["All","Registered", "Pending", "Abandoned", "Others"].map((status) => (
                             <button
                                 key={status}
                                 className={`px-3 py-1 rounded-lg text-sm font-medium flex items-center gap-1 ${
@@ -81,7 +76,9 @@ const Filters: React.FC<FiltersProps> = ({
                                             ? "bg-yellow-500"
                                             : status === "Abandoned"
                                             ? "bg-red-500"
-                                            : "bg-blue-500"
+                                            : status == "Others" 
+                                            ?"bg-blue-500"
+                                            : "bg-white"
                                     }`}
                                 ></span>
                                 {status}

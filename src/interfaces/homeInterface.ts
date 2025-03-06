@@ -28,10 +28,11 @@ export interface FiltersType {
 
 
 export interface FiltersProps {
-    isVisible: ()=>void;
+    isVisible: boolean;
     handleViewMode: (mode: "grid" | "list") => void;
     view: "grid" | "list";
     filters: FiltersType;
     updateFilters: (newFilters: FiltersType) => void;
     filterOptions: any
+    closeFilter: (val: boolean)=>void
 };

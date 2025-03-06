@@ -1,4 +1,4 @@
-import { Button, Chip } from "@nextui-org/react";
+import { Button, Chip, Skeleton } from "@nextui-org/react";
 import formatTimestamp from "../config/timerConfig";
 import { Monitor, RefreshCw } from "lucide-react";
 
@@ -14,6 +14,30 @@ const TrademarkList = ({ viewMode, results }: TrademarkListProps) => {
         </div>
     );
 
+    const TrademarkImage = ({ src, alt }: { src: string; alt: string }) => {
+        if (src == '') {
+          return (
+            <Skeleton className="rounded-lg">
+              <div className="h-[82px] w-[82px] bg-default-200 rounded-lg"></div>
+            </Skeleton>
+          )
+        }
+    
+        return (
+          <img
+            src={src || "/placeholder.svg"}
+            alt={alt}
+            className="shadow-lg rounded-lg"
+            width={82}
+            height={82}
+            onError={(e) => {
+              e.currentTarget.style.display = "none"
+              e.currentTarget.parentElement?.classList.add("skeleton-fallback")
+            }}
+          />
+        )
+      }
+
     const renderGridView = () => {
         if (results.length === 0) return renderEmptyState();
 
@@ -21,15 +45,9 @@ const TrademarkList = ({ viewMode, results }: TrademarkListProps) => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
                 {results.map((result: any, index: number) => (
                     <div key={index} className="border rounded-lg p-4 space-y-3">
-                        <div className="flex justify-between items-start">
-                            <div>
-                                <img
-                                    src=""
-                                    alt={result._source.mark_identification}
-                                    className="shadow-lg rounded-lg"
-                                    width={82}
-                                    height={82}
-                                />
+                        <div className="flex  justify-between items-start">
+                            <div className="bg-gray-100 rounded-lg border">
+                            <TrademarkImage src={result._source.image_url || ""} alt='' />
                                 <h2 className="text-2xl font-bold mb-1">
                                     {result._source.mark_identification}
                                 </h2>
@@ -119,13 +137,7 @@ const TrademarkList = ({ viewMode, results }: TrademarkListProps) => {
                             <tr key={result.id} className="py-4">
                                 <td className="p-2 text-center">
                                     <div className="w-16 h-16 bg-gray-100 flex items-center justify-center rounded border">
-                                        <img
-                                            src=""
-                                            alt={result._source.mark_identification}
-                                            className="shadow-lg rounded-lg"
-                                            width={82}
-                                            height={82}
-                                        />
+                                    <TrademarkImage src={result._source.image_url || ""} alt='' />
                                     </div>
                                 </td>
                                 <td className="p-2 text-start">
